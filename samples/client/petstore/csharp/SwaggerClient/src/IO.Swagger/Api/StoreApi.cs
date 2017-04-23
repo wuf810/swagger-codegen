@@ -198,6 +198,8 @@ namespace IO.Swagger.Api
     /// </summary>
     public partial class StoreApi : IStoreApi
     {
+
+        private static Logger log = new Logger(nameof(StoreApi));
         private IO.Swagger.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
@@ -206,6 +208,7 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public StoreApi(String basePath)
         {
+            log.Trace("ctor");
             this.Configuration = new Configuration(new ApiClient(basePath));
 
             ExceptionFactory = IO.Swagger.Client.Configuration.DefaultExceptionFactory;
@@ -225,8 +228,13 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public StoreApi(Configuration configuration = null)
         {
-            if (configuration == null) // use the default one in Configuration
+            log.Trace("ctor");
+            if (configuration == null)
+            {
+                // use the default one in Configuration
+                log.Debug("Use default configuration");
                 this.Configuration = Configuration.Default;
+            }
             else
                 this.Configuration = configuration;
 
@@ -237,6 +245,7 @@ namespace IO.Swagger.Api
             {
                 this.Configuration.ApiClient.Configuration = this.Configuration;
             }
+            log.Trace("end");
         }
 
         /// <summary>
@@ -299,6 +308,7 @@ namespace IO.Swagger.Api
         [Obsolete("AddDefaultHeader is deprecated, please use Configuration.AddDefaultHeader instead.")]
         public void AddDefaultHeader(string key, string value)
         {
+            log.Debug("Adding default header: " + key + ":" + value);
             this.Configuration.AddDefaultHeader(key, value);
         }
 
@@ -321,9 +331,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> DeleteOrderWithHttpInfo (string orderId)
         {
+            log.Trace("start");
             // verify the required parameter 'orderId' is set
             if (orderId == null)
-                throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->DeleteOrder");
+            throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->DeleteOrder");
 
             var localVarPath = "/store/order/{order_id}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -359,8 +370,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("DeleteOrder", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(DeleteOrder), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -391,7 +406,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'orderId' is set
             if (orderId == null)
-                throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->DeleteOrder");
+            throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->DeleteOrder");
 
             var localVarPath = "/store/order/{order_id}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -427,7 +442,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("DeleteOrder", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(DeleteOrder), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -455,6 +470,7 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Dictionary&lt;string, int?&gt;</returns>
         public ApiResponse< Dictionary<string, int?> > GetInventoryWithHttpInfo ()
         {
+            log.Trace("start");
 
             var localVarPath = "/store/inventory";
             var localVarPathParams = new Dictionary<String, String>();
@@ -494,8 +510,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetInventory", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(GetInventory), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<Dictionary<string, int?>>(localVarStatusCode,
@@ -561,7 +581,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetInventory", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(GetInventory), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -591,9 +611,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Order</returns>
         public ApiResponse< Order > GetOrderByIdWithHttpInfo (long? orderId)
         {
+            log.Trace("start");
             // verify the required parameter 'orderId' is set
             if (orderId == null)
-                throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->GetOrderById");
+            throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->GetOrderById");
 
             var localVarPath = "/store/order/{order_id}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -629,8 +650,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetOrderById", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(GetOrderById), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<Order>(localVarStatusCode,
@@ -662,7 +687,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'orderId' is set
             if (orderId == null)
-                throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->GetOrderById");
+            throw new ApiException(400, "Missing required parameter 'orderId' when calling StoreApi->GetOrderById");
 
             var localVarPath = "/store/order/{order_id}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -698,7 +723,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetOrderById", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(GetOrderById), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -728,9 +753,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Order</returns>
         public ApiResponse< Order > PlaceOrderWithHttpInfo (Order body)
         {
+            log.Trace("start");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling StoreApi->PlaceOrder");
+            throw new ApiException(400, "Missing required parameter 'body' when calling StoreApi->PlaceOrder");
 
             var localVarPath = "/store/order";
             var localVarPathParams = new Dictionary<String, String>();
@@ -773,8 +799,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("PlaceOrder", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(PlaceOrder), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<Order>(localVarStatusCode,
@@ -806,7 +836,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling StoreApi->PlaceOrder");
+            throw new ApiException(400, "Missing required parameter 'body' when calling StoreApi->PlaceOrder");
 
             var localVarPath = "/store/order";
             var localVarPathParams = new Dictionary<String, String>();
@@ -849,7 +879,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("PlaceOrder", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(PlaceOrder), localVarResponse);
                 if (exception != null) throw exception;
             }
 

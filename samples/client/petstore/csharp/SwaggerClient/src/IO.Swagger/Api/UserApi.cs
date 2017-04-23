@@ -374,6 +374,8 @@ namespace IO.Swagger.Api
     /// </summary>
     public partial class UserApi : IUserApi
     {
+
+        private static Logger log = new Logger(nameof(UserApi));
         private IO.Swagger.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
@@ -382,6 +384,7 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public UserApi(String basePath)
         {
+            log.Trace("ctor");
             this.Configuration = new Configuration(new ApiClient(basePath));
 
             ExceptionFactory = IO.Swagger.Client.Configuration.DefaultExceptionFactory;
@@ -401,8 +404,13 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public UserApi(Configuration configuration = null)
         {
-            if (configuration == null) // use the default one in Configuration
+            log.Trace("ctor");
+            if (configuration == null)
+            {
+                // use the default one in Configuration
+                log.Debug("Use default configuration");
                 this.Configuration = Configuration.Default;
+            }
             else
                 this.Configuration = configuration;
 
@@ -413,6 +421,7 @@ namespace IO.Swagger.Api
             {
                 this.Configuration.ApiClient.Configuration = this.Configuration;
             }
+            log.Trace("end");
         }
 
         /// <summary>
@@ -475,6 +484,7 @@ namespace IO.Swagger.Api
         [Obsolete("AddDefaultHeader is deprecated, please use Configuration.AddDefaultHeader instead.")]
         public void AddDefaultHeader(string key, string value)
         {
+            log.Debug("Adding default header: " + key + ":" + value);
             this.Configuration.AddDefaultHeader(key, value);
         }
 
@@ -497,9 +507,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> CreateUserWithHttpInfo (User body)
         {
+            log.Trace("start");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUser");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUser");
 
             var localVarPath = "/user";
             var localVarPathParams = new Dictionary<String, String>();
@@ -542,8 +553,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("CreateUser", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(CreateUser), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -574,7 +589,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUser");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUser");
 
             var localVarPath = "/user";
             var localVarPathParams = new Dictionary<String, String>();
@@ -617,7 +632,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("CreateUser", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(CreateUser), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -646,9 +661,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> CreateUsersWithArrayInputWithHttpInfo (List<User> body)
         {
+            log.Trace("start");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithArrayInput");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithArrayInput");
 
             var localVarPath = "/user/createWithArray";
             var localVarPathParams = new Dictionary<String, String>();
@@ -691,8 +707,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("CreateUsersWithArrayInput", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(CreateUsersWithArrayInput), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -723,7 +743,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithArrayInput");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithArrayInput");
 
             var localVarPath = "/user/createWithArray";
             var localVarPathParams = new Dictionary<String, String>();
@@ -766,7 +786,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("CreateUsersWithArrayInput", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(CreateUsersWithArrayInput), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -795,9 +815,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> CreateUsersWithListInputWithHttpInfo (List<User> body)
         {
+            log.Trace("start");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithListInput");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithListInput");
 
             var localVarPath = "/user/createWithList";
             var localVarPathParams = new Dictionary<String, String>();
@@ -840,8 +861,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("CreateUsersWithListInput", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(CreateUsersWithListInput), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -872,7 +897,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithListInput");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->CreateUsersWithListInput");
 
             var localVarPath = "/user/createWithList";
             var localVarPathParams = new Dictionary<String, String>();
@@ -915,7 +940,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("CreateUsersWithListInput", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(CreateUsersWithListInput), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -944,9 +969,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> DeleteUserWithHttpInfo (string username)
         {
+            log.Trace("start");
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->DeleteUser");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->DeleteUser");
 
             var localVarPath = "/user/{username}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -982,8 +1008,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("DeleteUser", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(DeleteUser), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -1014,7 +1044,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->DeleteUser");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->DeleteUser");
 
             var localVarPath = "/user/{username}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1050,7 +1080,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("DeleteUser", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(DeleteUser), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1080,9 +1110,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of User</returns>
         public ApiResponse< User > GetUserByNameWithHttpInfo (string username)
         {
+            log.Trace("start");
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->GetUserByName");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->GetUserByName");
 
             var localVarPath = "/user/{username}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1118,8 +1149,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetUserByName", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(GetUserByName), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<User>(localVarStatusCode,
@@ -1151,7 +1186,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->GetUserByName");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->GetUserByName");
 
             var localVarPath = "/user/{username}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1187,7 +1222,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetUserByName", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(GetUserByName), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1219,12 +1254,13 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of string</returns>
         public ApiResponse< string > LoginUserWithHttpInfo (string username, string password)
         {
+            log.Trace("start");
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->LoginUser");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->LoginUser");
             // verify the required parameter 'password' is set
             if (password == null)
-                throw new ApiException(400, "Missing required parameter 'password' when calling UserApi->LoginUser");
+            throw new ApiException(400, "Missing required parameter 'password' when calling UserApi->LoginUser");
 
             var localVarPath = "/user/login";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1261,8 +1297,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("LoginUser", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(LoginUser), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<string>(localVarStatusCode,
@@ -1296,10 +1336,10 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->LoginUser");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->LoginUser");
             // verify the required parameter 'password' is set
             if (password == null)
-                throw new ApiException(400, "Missing required parameter 'password' when calling UserApi->LoginUser");
+            throw new ApiException(400, "Missing required parameter 'password' when calling UserApi->LoginUser");
 
             var localVarPath = "/user/login";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1336,7 +1376,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("LoginUser", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(LoginUser), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1363,6 +1403,7 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> LogoutUserWithHttpInfo ()
         {
+            log.Trace("start");
 
             var localVarPath = "/user/logout";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1397,8 +1438,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("LogoutUser", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(LogoutUser), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -1459,7 +1504,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("LogoutUser", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(LogoutUser), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1490,12 +1535,13 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> UpdateUserWithHttpInfo (string username, User body)
         {
+            log.Trace("start");
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->UpdateUser");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->UpdateUser");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->UpdateUser");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->UpdateUser");
 
             var localVarPath = "/user/{username}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1539,8 +1585,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UpdateUser", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(UpdateUser), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -1573,10 +1623,10 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'username' is set
             if (username == null)
-                throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->UpdateUser");
+            throw new ApiException(400, "Missing required parameter 'username' when calling UserApi->UpdateUser");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->UpdateUser");
+            throw new ApiException(400, "Missing required parameter 'body' when calling UserApi->UpdateUser");
 
             var localVarPath = "/user/{username}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1620,7 +1670,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UpdateUser", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(UpdateUser), localVarResponse);
                 if (exception != null) throw exception;
             }
 

@@ -240,6 +240,8 @@ namespace IO.Swagger.Api
     /// </summary>
     public partial class FakeApi : IFakeApi
     {
+
+        private static Logger log = new Logger(nameof(FakeApi));
         private IO.Swagger.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
@@ -248,6 +250,7 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public FakeApi(String basePath)
         {
+            log.Trace("ctor");
             this.Configuration = new Configuration(new ApiClient(basePath));
 
             ExceptionFactory = IO.Swagger.Client.Configuration.DefaultExceptionFactory;
@@ -267,8 +270,13 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public FakeApi(Configuration configuration = null)
         {
-            if (configuration == null) // use the default one in Configuration
+            log.Trace("ctor");
+            if (configuration == null)
+            {
+                // use the default one in Configuration
+                log.Debug("Use default configuration");
                 this.Configuration = Configuration.Default;
+            }
             else
                 this.Configuration = configuration;
 
@@ -279,6 +287,7 @@ namespace IO.Swagger.Api
             {
                 this.Configuration.ApiClient.Configuration = this.Configuration;
             }
+            log.Trace("end");
         }
 
         /// <summary>
@@ -341,6 +350,7 @@ namespace IO.Swagger.Api
         [Obsolete("AddDefaultHeader is deprecated, please use Configuration.AddDefaultHeader instead.")]
         public void AddDefaultHeader(string key, string value)
         {
+            log.Debug("Adding default header: " + key + ":" + value);
             this.Configuration.AddDefaultHeader(key, value);
         }
 
@@ -364,9 +374,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of ModelClient</returns>
         public ApiResponse< ModelClient > TestClientModelWithHttpInfo (ModelClient body)
         {
+            log.Trace("start");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling FakeApi->TestClientModel");
+            throw new ApiException(400, "Missing required parameter 'body' when calling FakeApi->TestClientModel");
 
             var localVarPath = "/fake";
             var localVarPathParams = new Dictionary<String, String>();
@@ -409,8 +420,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("TestClientModel", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(TestClientModel), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<ModelClient>(localVarStatusCode,
@@ -442,7 +457,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling FakeApi->TestClientModel");
+            throw new ApiException(400, "Missing required parameter 'body' when calling FakeApi->TestClientModel");
 
             var localVarPath = "/fake";
             var localVarPathParams = new Dictionary<String, String>();
@@ -485,7 +500,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("TestClientModel", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(TestClientModel), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -540,18 +555,19 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> TestEndpointParametersWithHttpInfo (decimal? number, double? _double, string patternWithoutDelimiter, byte[] _byte, int? integer = null, int? int32 = null, long? int64 = null, float? _float = null, string _string = null, byte[] binary = null, DateTime? date = null, DateTime? dateTime = null, string password = null, string callback = null)
         {
+            log.Trace("start");
             // verify the required parameter 'number' is set
             if (number == null)
-                throw new ApiException(400, "Missing required parameter 'number' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter 'number' when calling FakeApi->TestEndpointParameters");
             // verify the required parameter '_double' is set
             if (_double == null)
-                throw new ApiException(400, "Missing required parameter '_double' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter '_double' when calling FakeApi->TestEndpointParameters");
             // verify the required parameter 'patternWithoutDelimiter' is set
             if (patternWithoutDelimiter == null)
-                throw new ApiException(400, "Missing required parameter 'patternWithoutDelimiter' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter 'patternWithoutDelimiter' when calling FakeApi->TestEndpointParameters");
             // verify the required parameter '_byte' is set
             if (_byte == null)
-                throw new ApiException(400, "Missing required parameter '_byte' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter '_byte' when calling FakeApi->TestEndpointParameters");
 
             var localVarPath = "/fake";
             var localVarPathParams = new Dictionary<String, String>();
@@ -609,8 +625,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("TestEndpointParameters", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(TestEndpointParameters), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -667,16 +687,16 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'number' is set
             if (number == null)
-                throw new ApiException(400, "Missing required parameter 'number' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter 'number' when calling FakeApi->TestEndpointParameters");
             // verify the required parameter '_double' is set
             if (_double == null)
-                throw new ApiException(400, "Missing required parameter '_double' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter '_double' when calling FakeApi->TestEndpointParameters");
             // verify the required parameter 'patternWithoutDelimiter' is set
             if (patternWithoutDelimiter == null)
-                throw new ApiException(400, "Missing required parameter 'patternWithoutDelimiter' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter 'patternWithoutDelimiter' when calling FakeApi->TestEndpointParameters");
             // verify the required parameter '_byte' is set
             if (_byte == null)
-                throw new ApiException(400, "Missing required parameter '_byte' when calling FakeApi->TestEndpointParameters");
+            throw new ApiException(400, "Missing required parameter '_byte' when calling FakeApi->TestEndpointParameters");
 
             var localVarPath = "/fake";
             var localVarPathParams = new Dictionary<String, String>();
@@ -733,7 +753,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("TestEndpointParameters", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(TestEndpointParameters), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -776,6 +796,7 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> TestEnumParametersWithHttpInfo (List<string> enumFormStringArray = null, string enumFormString = null, List<string> enumHeaderStringArray = null, string enumHeaderString = null, List<string> enumQueryStringArray = null, string enumQueryString = null, int? enumQueryInteger = null, double? enumQueryDouble = null)
         {
+            log.Trace("start");
 
             var localVarPath = "/fake";
             var localVarPathParams = new Dictionary<String, String>();
@@ -818,8 +839,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("TestEnumParameters", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(TestEnumParameters), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -904,7 +929,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("TestEnumParameters", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(TestEnumParameters), localVarResponse);
                 if (exception != null) throw exception;
             }
 

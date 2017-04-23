@@ -390,6 +390,8 @@ namespace IO.Swagger.Api
     /// </summary>
     public partial class PetApi : IPetApi
     {
+
+        private static Logger log = new Logger(nameof(PetApi));
         private IO.Swagger.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
@@ -398,6 +400,7 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public PetApi(String basePath)
         {
+            log.Trace("ctor");
             this.Configuration = new Configuration(new ApiClient(basePath));
 
             ExceptionFactory = IO.Swagger.Client.Configuration.DefaultExceptionFactory;
@@ -417,8 +420,13 @@ namespace IO.Swagger.Api
         /// <returns></returns>
         public PetApi(Configuration configuration = null)
         {
-            if (configuration == null) // use the default one in Configuration
+            log.Trace("ctor");
+            if (configuration == null)
+            {
+                // use the default one in Configuration
+                log.Debug("Use default configuration");
                 this.Configuration = Configuration.Default;
+            }
             else
                 this.Configuration = configuration;
 
@@ -429,6 +437,7 @@ namespace IO.Swagger.Api
             {
                 this.Configuration.ApiClient.Configuration = this.Configuration;
             }
+            log.Trace("end");
         }
 
         /// <summary>
@@ -491,6 +500,7 @@ namespace IO.Swagger.Api
         [Obsolete("AddDefaultHeader is deprecated, please use Configuration.AddDefaultHeader instead.")]
         public void AddDefaultHeader(string key, string value)
         {
+            log.Debug("Adding default header: " + key + ":" + value);
             this.Configuration.AddDefaultHeader(key, value);
         }
 
@@ -513,9 +523,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> AddPetWithHttpInfo (Pet body)
         {
+            log.Trace("start");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->AddPet");
+            throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->AddPet");
 
             var localVarPath = "/pet";
             var localVarPathParams = new Dictionary<String, String>();
@@ -566,8 +577,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("AddPet", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(AddPet), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -598,7 +613,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->AddPet");
+            throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->AddPet");
 
             var localVarPath = "/pet";
             var localVarPathParams = new Dictionary<String, String>();
@@ -649,7 +664,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("AddPet", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(AddPet), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -680,9 +695,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> DeletePetWithHttpInfo (long? petId, string apiKey = null)
         {
+            log.Trace("start");
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->DeletePet");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->DeletePet");
 
             var localVarPath = "/pet/{petId}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -725,8 +741,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("DeletePet", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(DeletePet), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -759,7 +779,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->DeletePet");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->DeletePet");
 
             var localVarPath = "/pet/{petId}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -802,7 +822,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("DeletePet", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(DeletePet), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -832,9 +852,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of List&lt;Pet&gt;</returns>
         public ApiResponse< List<Pet> > FindPetsByStatusWithHttpInfo (List<string> status)
         {
+            log.Trace("start");
             // verify the required parameter 'status' is set
             if (status == null)
-                throw new ApiException(400, "Missing required parameter 'status' when calling PetApi->FindPetsByStatus");
+            throw new ApiException(400, "Missing required parameter 'status' when calling PetApi->FindPetsByStatus");
 
             var localVarPath = "/pet/findByStatus";
             var localVarPathParams = new Dictionary<String, String>();
@@ -876,8 +897,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("FindPetsByStatus", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(FindPetsByStatus), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<List<Pet>>(localVarStatusCode,
@@ -909,7 +934,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'status' is set
             if (status == null)
-                throw new ApiException(400, "Missing required parameter 'status' when calling PetApi->FindPetsByStatus");
+            throw new ApiException(400, "Missing required parameter 'status' when calling PetApi->FindPetsByStatus");
 
             var localVarPath = "/pet/findByStatus";
             var localVarPathParams = new Dictionary<String, String>();
@@ -951,7 +976,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("FindPetsByStatus", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(FindPetsByStatus), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -981,9 +1006,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of List&lt;Pet&gt;</returns>
         public ApiResponse< List<Pet> > FindPetsByTagsWithHttpInfo (List<string> tags)
         {
+            log.Trace("start");
             // verify the required parameter 'tags' is set
             if (tags == null)
-                throw new ApiException(400, "Missing required parameter 'tags' when calling PetApi->FindPetsByTags");
+            throw new ApiException(400, "Missing required parameter 'tags' when calling PetApi->FindPetsByTags");
 
             var localVarPath = "/pet/findByTags";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1025,8 +1051,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("FindPetsByTags", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(FindPetsByTags), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<List<Pet>>(localVarStatusCode,
@@ -1058,7 +1088,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'tags' is set
             if (tags == null)
-                throw new ApiException(400, "Missing required parameter 'tags' when calling PetApi->FindPetsByTags");
+            throw new ApiException(400, "Missing required parameter 'tags' when calling PetApi->FindPetsByTags");
 
             var localVarPath = "/pet/findByTags";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1100,7 +1130,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("FindPetsByTags", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(FindPetsByTags), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1130,9 +1160,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Pet</returns>
         public ApiResponse< Pet > GetPetByIdWithHttpInfo (long? petId)
         {
+            log.Trace("start");
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->GetPetById");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->GetPetById");
 
             var localVarPath = "/pet/{petId}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1174,8 +1205,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetPetById", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(GetPetById), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<Pet>(localVarStatusCode,
@@ -1207,7 +1242,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->GetPetById");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->GetPetById");
 
             var localVarPath = "/pet/{petId}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1248,7 +1283,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("GetPetById", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(GetPetById), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1277,9 +1312,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> UpdatePetWithHttpInfo (Pet body)
         {
+            log.Trace("start");
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->UpdatePet");
+            throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->UpdatePet");
 
             var localVarPath = "/pet";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1330,8 +1366,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UpdatePet", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(UpdatePet), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -1362,7 +1402,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'body' is set
             if (body == null)
-                throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->UpdatePet");
+            throw new ApiException(400, "Missing required parameter 'body' when calling PetApi->UpdatePet");
 
             var localVarPath = "/pet";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1413,7 +1453,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UpdatePet", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(UpdatePet), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1446,9 +1486,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of Object(void)</returns>
         public ApiResponse<Object> UpdatePetWithFormWithHttpInfo (long? petId, string name = null, string status = null)
         {
+            log.Trace("start");
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UpdatePetWithForm");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UpdatePetWithForm");
 
             var localVarPath = "/pet/{petId}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1493,8 +1534,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UpdatePetWithForm", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(UpdatePetWithForm), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             
@@ -1529,7 +1574,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UpdatePetWithForm");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UpdatePetWithForm");
 
             var localVarPath = "/pet/{petId}";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1574,7 +1619,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UpdatePetWithForm", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(UpdatePetWithForm), localVarResponse);
                 if (exception != null) throw exception;
             }
 
@@ -1608,9 +1653,10 @@ namespace IO.Swagger.Api
         /// <returns>ApiResponse of ApiResponse</returns>
         public ApiResponse< ApiResponse > UploadFileWithHttpInfo (long? petId, string additionalMetadata = null, System.IO.Stream file = null)
         {
+            log.Trace("start");
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UploadFile");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UploadFile");
 
             var localVarPath = "/pet/{petId}/uploadImage";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1654,8 +1700,12 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UploadFile", localVarResponse);
-                if (exception != null) throw exception;
+                Exception exception = ExceptionFactory(nameof(UploadFile), localVarResponse);
+                if (exception != null){
+
+                    log.Error(exception, "API Exception");
+                    throw exception;
+                }
             }
 
             return new ApiResponse<ApiResponse>(localVarStatusCode,
@@ -1691,7 +1741,7 @@ namespace IO.Swagger.Api
         {
             // verify the required parameter 'petId' is set
             if (petId == null)
-                throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UploadFile");
+            throw new ApiException(400, "Missing required parameter 'petId' when calling PetApi->UploadFile");
 
             var localVarPath = "/pet/{petId}/uploadImage";
             var localVarPathParams = new Dictionary<String, String>();
@@ -1735,7 +1785,7 @@ namespace IO.Swagger.Api
 
             if (ExceptionFactory != null)
             {
-                Exception exception = ExceptionFactory("UploadFile", localVarResponse);
+                Exception exception = ExceptionFactory(nameof(UploadFile), localVarResponse);
                 if (exception != null) throw exception;
             }
 

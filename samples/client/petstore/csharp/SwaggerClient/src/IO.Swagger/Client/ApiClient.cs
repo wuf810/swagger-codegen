@@ -21,15 +21,16 @@ using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace IO.Swagger.Client
-{
+namespace IO.Swagger.Client {
     /// <summary>
     /// API client is mainly responsible for making the HTTP call to the API backend.
     /// </summary>
-    public partial class ApiClient
-    {
-        private JsonSerializerSettings serializerSettings = new JsonSerializerSettings
-        {
+    public partial class ApiClient {
+
+        private static Logger log = new Logger(nameof(ApiClient));
+        private const string SERVER_DEFAULT_ADDRESS = "http://petstore.swagger.io:80/v2";
+
+        private JsonSerializerSettings serializerSettings = new JsonSerializerSettings {
             ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
         };
 
@@ -48,27 +49,29 @@ namespace IO.Swagger.Client
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiClient" /> class
-        /// with default configuration and base path (http://petstore.swagger.io:80/v2).
+        /// with default configuration and base path (<see cref="SERVER_DEFAULT_ADDRESS"/>).
         /// </summary>
-        public ApiClient()
-        {
+        public ApiClient() {
+            log.Trace("start");
             Configuration = Configuration.Default;
-            RestClient = new RestClient("http://petstore.swagger.io:80/v2");
+            RestClient = new RestClient(SERVER_DEFAULT_ADDRESS);
+            log.Trace("end");
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiClient" /> class
-        /// with default base path (http://petstore.swagger.io:80/v2).
+        /// with default base path (<see cref="SERVER_DEFAULT_ADDRESS"/>).
         /// </summary>
         /// <param name="config">An instance of Configuration.</param>
-        public ApiClient(Configuration config = null)
-        {
-            if (config == null)
+        public ApiClient(Configuration config = null) {
+            log.Trace("start");
+            if (config == null){
                 Configuration = Configuration.Default;
-            else
+            } else {
                 Configuration = config;
+            }
 
-            RestClient = new RestClient("http://petstore.swagger.io:80/v2");
+            RestClient = new RestClient(SERVER_DEFAULT_ADDRESS);
         }
 
         /// <summary>
@@ -76,10 +79,11 @@ namespace IO.Swagger.Client
         /// with default configuration.
         /// </summary>
         /// <param name="basePath">The base path.</param>
-        public ApiClient(String basePath = "http://petstore.swagger.io:80/v2")
-        {
-           if (String.IsNullOrEmpty(basePath))
+        public ApiClient(string basePath = SERVER_DEFAULT_ADDRESS) {
+            log.Trace("start");
+            if(string.IsNullOrEmpty(basePath)) {
                 throw new ArgumentException("basePath cannot be empty");
+            } 
 
             RestClient = new RestClient(basePath);
             Configuration = Configuration.Default;
@@ -109,8 +113,8 @@ namespace IO.Swagger.Client
             String path, RestSharp.Method method, Dictionary<String, String> queryParams, Object postBody,
             Dictionary<String, String> headerParams, Dictionary<String, String> formParams,
             Dictionary<String, FileParameter> fileParams, Dictionary<String, String> pathParams,
-            String contentType)
-        {
+            String contentType="application/json") {
+            log.Trace("start");
             var request = new RestRequest(path, method);
 
             // add path parameter, if any
@@ -130,23 +134,14 @@ namespace IO.Swagger.Client
                 request.AddParameter(param.Key, param.Value);
 
             // add file parameter, if any
-            foreach(var param in fileParams)
-            {
+            foreach(var param in fileParams) {
                 request.AddFile(param.Value.Name, param.Value.Writer, param.Value.FileName, param.Value.ContentType);
             }
 
-            if (postBody != null) // http body (model or byte[]) parameter
-            {
-                if (postBody.GetType() == typeof(String))
-                {
-                    request.AddParameter("application/json", postBody, ParameterType.RequestBody);
-                }
-                else if (postBody.GetType() == typeof(byte[]))
-                {
-                    request.AddParameter(contentType, postBody, ParameterType.RequestBody);
-                }
+            if (postBody != null) {
+                request.AddParameter(contentType, postBody, ParameterType.RequestBody);
             }
-
+            log.Trace("end");
             return request;
         }
 
@@ -163,25 +158,32 @@ namespace IO.Swagger.Client
         /// <param name="pathParams">Path parameters.</param>
         /// <param name="contentType">Content Type of the request</param>
         /// <returns>Object</returns>
-        public Object CallApi(
-            String path, RestSharp.Method method, Dictionary<String, String> queryParams, Object postBody,
-            Dictionary<String, String> headerParams, Dictionary<String, String> formParams,
-            Dictionary<String, FileParameter> fileParams, Dictionary<String, String> pathParams,
-            String contentType)
-        {
+        public object CallApi(
+            string path,
+            RestSharp.Method method,
+            Dictionary<string, string> queryParams,
+            object postBody,
+            Dictionary<string, string> headerParams,
+            Dictionary<string, string> formParams,
+            Dictionary<string, FileParameter> fileParams,
+            Dictionary<string, string> pathParams,
+            string contentType) {
+            log.Trace("start");
             var request = PrepareRequest(
                 path, method, queryParams, postBody, headerParams, formParams, fileParams,
                 pathParams, contentType);
 
             // set timeout
             RestClient.Timeout = Configuration.Timeout;
+            log.Debug("Timeout: " + Configuration.Timeout);
             // set user agent
             RestClient.UserAgent = Configuration.UserAgent;
+            log.Debug("UserAgent: " + Configuration.UserAgent);
 
             InterceptRequest(request);
             var response = RestClient.Execute(request);
             InterceptResponse(request, response);
-
+            log.Trace("end");
             return (Object) response;
         }
         /// <summary>
@@ -197,18 +199,25 @@ namespace IO.Swagger.Client
         /// <param name="pathParams">Path parameters.</param>
         /// <param name="contentType">Content type.</param>
         /// <returns>The Task instance.</returns>
-        public async System.Threading.Tasks.Task<Object> CallApiAsync(
-            String path, RestSharp.Method method, Dictionary<String, String> queryParams, Object postBody,
-            Dictionary<String, String> headerParams, Dictionary<String, String> formParams,
-            Dictionary<String, FileParameter> fileParams, Dictionary<String, String> pathParams,
-            String contentType)
-        {
+        public async System.Threading.Tasks.Task<object> CallApiAsync(
+            string path,
+            RestSharp.Method method,
+            Dictionary<string, string> queryParams,
+            object postBody,
+            Dictionary<string, string> headerParams,
+            Dictionary<string, string> formParams,
+            Dictionary<string, FileParameter> fileParams,
+            Dictionary<string, string> pathParams,
+            string contentType) {
+            log.Trace("start");
             var request = PrepareRequest(
                 path, method, queryParams, postBody, headerParams, formParams, fileParams,
                 pathParams, contentType);
             InterceptRequest(request);
             var response = await RestClient.ExecuteTaskAsync(request);
+            log.Debug("Received response");
             InterceptResponse(request, response);
+            log.Trace("end");
             return (Object)response;
         }
 
@@ -217,8 +226,7 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="str">String to be escaped.</param>
         /// <returns>Escaped string.</returns>
-        public string EscapeString(string str)
-        {
+        public string EscapeString(string str) {
             return UrlEncode(str);
         }
 
@@ -228,12 +236,14 @@ namespace IO.Swagger.Client
         /// <param name="name">Parameter name.</param>
         /// <param name="stream">Input stream.</param>
         /// <returns>FileParameter.</returns>
-        public FileParameter ParameterToFile(string name, Stream stream)
-        {
-            if (stream is FileStream)
+        public FileParameter ParameterToFile(string name, Stream stream) {
+            log.Trace("start");
+            if (stream is FileStream) {
+                log.Debug("FileStream");
                 return FileParameter.Create(name, ReadAsBytes(stream), Path.GetFileName(((FileStream)stream).Name));
-            else
+            } else {
                 return FileParameter.Create(name, ReadAsBytes(stream), "no_file_name_provided");
+            }
         }
 
         /// <summary>
@@ -243,22 +253,23 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="obj">The parameter (header, path, query, form).</param>
         /// <returns>Formatted string.</returns>
-        public string ParameterToString(object obj)
-        {
-            if (obj is DateTime)
+        public string ParameterToString(object obj) {
+            log.Trace("start");
+            if (obj is DateTime) {
                 // Return a formatted date string - Can be customized with Configuration.DateTimeFormat
                 // Defaults to an ISO 8601, using the known as a Round-trip date/time pattern ("o")
                 // https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx#Anchor_8
                 // For example: 2009-06-15T13:45:30.0000000
+                log.Debug("obj is "+nameof(DateTime));
                 return ((DateTime)obj).ToString (Configuration.DateTimeFormat);
-            else if (obj is DateTimeOffset)
+            } else if (obj is DateTimeOffset) {
                 // Return a formatted date string - Can be customized with Configuration.DateTimeFormat
                 // Defaults to an ISO 8601, using the known as a Round-trip date/time pattern ("o")
                 // https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx#Anchor_8
                 // For example: 2009-06-15T13:45:30.0000000
+                log.Debug("obj is "+nameof(DateTimeOffset));
                 return ((DateTimeOffset)obj).ToString (Configuration.DateTimeFormat);
-            else if (obj is IList)
-            {
+            } else if (obj is IList) {
                 var flattenedString = new StringBuilder();
                 foreach (var param in (IList)obj)
                 {
@@ -266,10 +277,12 @@ namespace IO.Swagger.Client
                         flattenedString.Append(",");
                     flattenedString.Append(param);
                 }
+                log.Debug("obj is "+nameof(IList));
                 return flattenedString.ToString();
-            }
-            else
+            } else {
+                log.Trace("end");
                 return Convert.ToString (obj);
+            }
         }
 
         /// <summary>
@@ -278,27 +291,24 @@ namespace IO.Swagger.Client
         /// <param name="response">The HTTP response.</param>
         /// <param name="type">Object type.</param>
         /// <returns>Object representation of the JSON string.</returns>
-        public object Deserialize(IRestResponse response, Type type)
-        {
+        public object Deserialize(IRestResponse response, Type type) {
+            log.Trace("start");
             IList<Parameter> headers = response.Headers;
-            if (type == typeof(byte[])) // return byte array
-            {
+            if (type == typeof(byte[])) {
+                // return byte array
+                log.Trace("end");
                 return response.RawBytes;
             }
 
-            if (type == typeof(Stream))
-            {
-                if (headers != null)
-                {
+            if (type == typeof(Stream)) {
+                if (headers != null) {
                     var filePath = String.IsNullOrEmpty(Configuration.TempFolderPath)
                         ? Path.GetTempPath()
                         : Configuration.TempFolderPath;
                     var regex = new Regex(@"Content-Disposition=.*filename=['""]?([^'""\s]+)['""]?$");
-                    foreach (var header in headers)
-                    {
+                    foreach (var header in headers) {
                         var match = regex.Match(header.ToString());
-                        if (match.Success)
-                        {
+                        if (match.Success) {
                             string fileName = filePath + SanitizeFilename(match.Groups[1].Value.Replace("\"", "").Replace("'", ""));
                             File.WriteAllBytes(fileName, response.RawBytes);
                             return new FileStream(fileName, FileMode.Open);
@@ -306,26 +316,48 @@ namespace IO.Swagger.Client
                     }
                 }
                 var stream = new MemoryStream(response.RawBytes);
+                log.Trace("end");
                 return stream;
             }
 
-            if (type.Name.StartsWith("System.Nullable`1[[System.DateTime")) // return a datetime object
-            {
+            if (type.Name.StartsWith("System.Nullable`1[[System.DateTime")) {
+                // return a datetime object 
+                log.Trace("end");
                 return DateTime.Parse(response.Content,  null, System.Globalization.DateTimeStyles.RoundtripKind);
             }
 
-            if (type == typeof(String) || type.Name.StartsWith("System.Nullable")) // return primitive type
-            {
+            if (type == typeof(String) || type.Name.StartsWith("System.Nullable")) {
+                // return primitive type 
+                log.Trace("end");
                 return ConvertType(response.Content, type);
             }
 
+            log.Trace("end");
+            return deserialize(response, type);
+        }
+
+        /// <summary>
+        /// Deserialize the JSON string into a proper object.
+        /// </summary>
+        /// <typeparam name="T">Model object</typeparam>
+        /// <param name="response">The HTTP response.</param>
+        /// <returns>Object representation of the JSON string.</returns>
+        public T Deserialize<T>(IRestResponse response) {
+            log.Trace("start");
+            var type = typeof(T);
             // at this point, it must be a model (json)
-            try
-            {
-                return JsonConvert.DeserializeObject(response.Content, type, serializerSettings);
+            if(!(deserialize(response, type) is T)) {
+                return default(T);
             }
-            catch (Exception e)
-            {
+
+            return (T) deserialize(response, type);
+        }
+
+        private object deserialize(IRestResponse response,Type type) {
+            try {
+                return JsonConvert.DeserializeObject(response.Content,type, serializerSettings);
+            } catch(Exception e) {
+                log.Trace("abort");
                 throw new ApiException(500, e.Message);
             }
         }
@@ -335,14 +367,15 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>JSON string.</returns>
-        public String Serialize(object obj)
-        {
-            try
-            {
-                return obj != null ? JsonConvert.SerializeObject(obj) : null;
-            }
-            catch (Exception e)
-            {
+        public String Serialize(object obj) {
+            log.Trace("start");
+            try {
+                string result=obj != null ? JsonConvert.SerializeObject(obj) : null;
+                log.Debug("result: "+result);
+                log.Trace("end");
+                return result;
+            } catch (Exception e) {
+                log.Trace("abort");
                 throw new ApiException(500, e.Message);
             }
         }
@@ -354,13 +387,15 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="contentTypes">The Content-Type array to select from.</param>
         /// <returns>The Content-Type header to use.</returns>
-        public String SelectHeaderContentType(String[] contentTypes)
-        {
-            if (contentTypes.Length == 0)
+        public String SelectHeaderContentType(String[] contentTypes) {
+            log.Trace("start");
+            if (contentTypes.Length == 0) {
                 return null;
+            }
 
-            if (contentTypes.Contains("application/json", StringComparer.OrdinalIgnoreCase))
+            if (contentTypes.Contains("application/json", StringComparer.OrdinalIgnoreCase)) {
                 return "application/json";
+            }
 
             return contentTypes[0]; // use the first content type specified in 'consumes'
         }
@@ -372,13 +407,14 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="accepts">The accepts array to select from.</param>
         /// <returns>The Accept header to use.</returns>
-        public String SelectHeaderAccept(String[] accepts)
-        {
-            if (accepts.Length == 0)
+        public String SelectHeaderAccept(String[] accepts) {
+            if (accepts.Length == 0) {
                 return null;
+            }
 
-            if (accepts.Contains("application/json", StringComparer.OrdinalIgnoreCase))
+            if (accepts.Contains("application/json", StringComparer.OrdinalIgnoreCase)) {
                 return "application/json";
+            }
 
             return String.Join(",", accepts);
         }
@@ -388,8 +424,7 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="text">String to be encoded.</param>
         /// <returns>Encoded string.</returns>
-        public static string Base64Encode(string text)
-        {
+        public static string Base64Encode(string text) {
             return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(text));
         }
 
@@ -400,8 +435,7 @@ namespace IO.Swagger.Client
         /// <param name="source">Object to be casted</param>
         /// <param name="dest">Target type</param>
         /// <returns>Casted object</returns>
-        public static dynamic ConvertType(dynamic source, Type dest)
-        {
+        public static dynamic ConvertType(dynamic source, Type dest) {
             return Convert.ChangeType(source, dest);
         }
 
@@ -411,16 +445,15 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="input">Input stream to be converted</param>
         /// <returns>Byte array</returns>
-        public static byte[] ReadAsBytes(Stream input)
-        {
+        public static byte[] ReadAsBytes(Stream input) {
+            log.Trace("start");
             byte[] buffer = new byte[16*1024];
-            using (MemoryStream ms = new MemoryStream())
-            {
+            using (MemoryStream ms = new MemoryStream()) {
                 int read;
-                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
-                {
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0) {
                     ms.Write(buffer, 0, read);
                 }
+                log.Trace("end");
                 return ms.ToArray();
             }
         }
@@ -431,25 +464,24 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="input">String to be URL encoded</param>
         /// <returns>Byte array</returns>
-        public static string UrlEncode(string input)
-        {
+        public static string UrlEncode(string input) {
+            log.Trace("start");
             const int maxLength = 32766;
 
-            if (input == null)
-            {
+            if (input == null) {
+                log.Trace("abort");
                 throw new ArgumentNullException("input");
             }
 
-            if (input.Length <= maxLength)
-            {
+            if (input.Length <= maxLength) {
+                log.Trace("end");
                 return Uri.EscapeDataString(input);
             }
 
             StringBuilder sb = new StringBuilder(input.Length * 2);
             int index = 0;
 
-            while (index < input.Length)
-            {
+            while (index < input.Length) {
                 int length = Math.Min(input.Length - index, maxLength);
                 string subString = input.Substring(index, length);
 
@@ -457,6 +489,7 @@ namespace IO.Swagger.Client
                 index += subString.Length;
             }
 
+            log.Trace("end");
             return sb.ToString();
         }
 
@@ -465,18 +498,16 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="filename">Filename</param>
         /// <returns>Filename</returns>
-        public static string SanitizeFilename(string filename)
-        {
+        public static string SanitizeFilename(string filename) {
+            log.Trace("start");
             Match match = Regex.Match(filename, @".*[/\\](.*)$");
 
-            if (match.Success)
-            {
+            if (match.Success) {
                 return match.Groups[1].Value;
-            }
-            else
-            {
+            } else {
                 return filename;
             }
+            log.Trace("end");
         }
     }
 }
