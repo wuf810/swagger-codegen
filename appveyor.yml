@@ -33,7 +33,7 @@ build_script:
   - nuget restore samples\client\petstore\csharp\SwaggerClientNetStandard\IO.Swagger.sln
   - msbuild samples\client\petstore\csharp\SwaggerClientNetStandard\IO.Swagger.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   # install swagger codegen locally
-  - mvn clean install --batch-mode
+  - mvn -q clean install --batch-mode
 test_script:
   # test c# API client
   - nunit-console samples\client\petstore\csharp\SwaggerClient\src\IO.Swagger.Test\bin\Debug\IO.Swagger.Test.dll --result=myresults.xml;format=AppVeyor
