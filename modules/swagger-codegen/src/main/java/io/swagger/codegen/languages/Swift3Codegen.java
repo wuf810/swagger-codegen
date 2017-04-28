@@ -1,15 +1,8 @@
 package io.swagger.codegen.languages;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 import io.swagger.codegen.*;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
-import io.swagger.models.Operation;
-import io.swagger.models.Swagger;
-import io.swagger.models.parameters.HeaderParameter;
-import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
@@ -17,7 +10,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -70,6 +62,7 @@ public class Swift3Codegen extends DefaultCodegen implements CodegenConfig {
 
         if(additionalProperties != null) {
             codegenModel.additionalPropertiesType = getSwaggerType(additionalProperties);
+            codegenModel.hasVarsOrProperties = true;
         }
     }
 

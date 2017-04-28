@@ -39,7 +39,7 @@ public class CodegenModel {
     public Set<String> allMandatory;
 
     public Set<String> imports = new TreeSet<String>();
-    public boolean hasVars, emptyVars, hasMoreModels, hasEnums, isEnum, hasRequired, isArrayModel, hasChildren;
+    public boolean hasVars, hasVarsOrProperties, emptyVars, hasMoreModels, hasEnums, isEnum, hasRequired, isArrayModel, hasChildren;
     public boolean hasOnlyReadOnly = true; // true if all properties are read-only
     public ExternalDocs externalDocs;
 
@@ -117,6 +117,8 @@ public class CodegenModel {
             return false;
         if (hasVars != that.hasVars)
             return false;
+        if (hasVarsOrProperties != that.hasVarsOrProperties)
+            return false;
         if (emptyVars != that.emptyVars)
             return false;
         if (hasMoreModels != that.hasMoreModels)
@@ -164,6 +166,7 @@ public class CodegenModel {
         result = 31 * result + (allMandatory != null ? allMandatory.hashCode() : 0);
         result = 31 * result + (imports != null ? imports.hashCode() : 0);
         result = 31 * result + (hasVars ? 13:31);
+        result = 31 * result + (hasVarsOrProperties ? 13:31);
         result = 31 * result + (emptyVars ? 13:31);
         result = 31 * result + (hasMoreModels ? 13:31);
         result = 31 * result + (hasEnums ? 13:31);

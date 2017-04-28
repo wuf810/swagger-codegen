@@ -279,16 +279,10 @@ class Decoders {
         }
         // Decoder for Cat
         Decoders.addDecoder(clazz: Cat.self) { (source: AnyObject, instance: AnyObject?) -> Cat in
-            let sourceDictionary = source as! [AnyHashable: Any]
-            let result = instance == nil ? Cat() : instance as! Cat
-            if decoders["\(Animal.self)"] != nil {
-              _ = Decoders.decode(clazz: Animal.self, source: source, instance: result)
+            if let source = source as?  {
+                return source
             }
-            
-            result.className = Decoders.decodeOptional(clazz: String.self, source: sourceDictionary["className"] as AnyObject?)
-            result.color = Decoders.decodeOptional(clazz: String.self, source: sourceDictionary["color"] as AnyObject?)
-            result.declawed = Decoders.decodeOptional(clazz: Bool.self, source: sourceDictionary["declawed"] as AnyObject?)
-            return result
+            fatalError("Source \(source) is not convertible to typealias Cat: Maybe swagger file is insufficient")
         }
 
 
@@ -341,16 +335,10 @@ class Decoders {
         }
         // Decoder for Dog
         Decoders.addDecoder(clazz: Dog.self) { (source: AnyObject, instance: AnyObject?) -> Dog in
-            let sourceDictionary = source as! [AnyHashable: Any]
-            let result = instance == nil ? Dog() : instance as! Dog
-            if decoders["\(Animal.self)"] != nil {
-              _ = Decoders.decode(clazz: Animal.self, source: source, instance: result)
+            if let source = source as?  {
+                return source
             }
-            
-            result.className = Decoders.decodeOptional(clazz: String.self, source: sourceDictionary["className"] as AnyObject?)
-            result.color = Decoders.decodeOptional(clazz: String.self, source: sourceDictionary["color"] as AnyObject?)
-            result.breed = Decoders.decodeOptional(clazz: String.self, source: sourceDictionary["breed"] as AnyObject?)
-            return result
+            fatalError("Source \(source) is not convertible to typealias Dog: Maybe swagger file is insufficient")
         }
 
 

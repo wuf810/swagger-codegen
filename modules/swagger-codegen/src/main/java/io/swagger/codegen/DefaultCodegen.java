@@ -1382,10 +1382,15 @@ public class DefaultCodegen {
                 m.allowableValues = new HashMap<String, Object>();
                 m.allowableValues.put("values", impl.getEnum());
             }
+
+            addVars(m, impl.getProperties(), impl.getRequired());
+
+            m.hasVarsOrProperties = (m.vars != null) && (!m.vars.isEmpty());
+
             if (impl.getAdditionalProperties() != null) {
                 addAdditionPropertiesToCodeGenModel(m, impl);
             }
-            addVars(m, impl.getProperties(), impl.getRequired());
+
         }
 
         if (m.vars != null) {
